@@ -1,13 +1,15 @@
+from click import style
 from flask import Flask, escape, request, render_template
 import pickle
 import numpy as np
 
 app = Flask(__name__)
-model = pickle.load(open('LOAN_PRIDICTION_MODEL.pickle', 'rb'))
+model = pickle.load(open('server\LOAN_PRIDICTION_MODEL.pickle', 'rb'))
 
 @app.route('/')
-def home():
-    return render_template("index.html")
+
+def index():    
+    return render_template('index.html')
 
 
 @app.route('/prediction', methods=['GET', 'POST'])
@@ -88,15 +90,18 @@ def prediction():
             print(x[i])
    
         prediction1 = model.predict([x])
+        print(prediction1)
 
 
-        if(prediction1=="N"):
-            prediction="No"
+        if(prediction1==0):
+            print(x)
+            return render_template("msg.html")
         else:
-            prediction1="Yes"
+            print(x)
+            return render_template("msg2.html")
 
 
-        return render_template("prediction.html", prediction_text="loan status is {}".format(prediction1))
+        
 
 
 
